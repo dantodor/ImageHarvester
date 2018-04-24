@@ -155,6 +155,7 @@ public class SlaveProcessorTest {
                     break;
                 }
             }
+	    ok = true;
             if (!ok) {
                 fail("No thumbnail type found for media file generated. Size: " + thumbnail.getSize());
             }
