@@ -48,9 +48,10 @@ public class RetrieveAndProcessActorTest {
     };
 
     private static String PROCESSING_PATH_PREFIX = Paths.get("harvester-server/src/test/resources/processing").toAbsolutePath().toString() + "/";
-    private static final String jpegImage1GitHubUrl = "https://raw.githubusercontent.com/europeana/ImageHarvester/develop/harvester-server/src/test/resources/image1.jpeg";
-    private static final String tiffImageGitHubUrl = "https://raw.githubusercontent.com/europeana/ImageHarvester/develop/harvester-server/src/test/resources/image3.tif";
-    private static final String pdfTextGitHubUrl = "https://raw.githubusercontent.com/europeana/ImageHarvester/develop/harvester-server/src/test/resources/text2.pdf";
+    private static final String jpegImage1GitHubUrl = "http://localhost:8080/image1.jpeg";
+    private static final String tiffImageGitHubUrl = "http://localhost:8080/image3.tif";
+    private static final String pdfTextGitHubUrl = "http://localhost:8080/text2.pdf";
+    private static final String jpegMediafrUrl = "http://localhost:8080/mediafr.jpg";
 
     private static final String PATH_PREFIX = Paths.get("src/test/resources/").toAbsolutePath().toString() + "/" ;
     private static final String PATH_COLORMAP = PATH_PREFIX + "colormap.png";
@@ -61,12 +62,26 @@ public class RetrieveAndProcessActorTest {
     final HttpRetrieveResponseFactory httpRetrieveResponseFactory = new HttpRetrieveResponseFactory();
 
     static ActorSystem system ;
+    private static HttpServer server;
+    private final static int port = 8080;
+    private static final String assetDir = "./assets";
 
     @BeforeClass
     public static void setup() throws Exception {
         FileUtils.forceMkdir(new File(FILESYSTEM_PATH_PREFIX));
         FileUtils.forceMkdir(new File(PROCESSING_PATH_PREFIX));
         system = ActorSystem.create();
+        try {
+            server = new HttpServer(port);
+            HttpServer.VirtualHost host = server.getVirtualHost(null); // default host
+            host.setAllowGeneratedIndex(true); // with directory index pages
+            File dir = new File(assetDir);
+            host.addContext("/", new HttpServer.FileContextHandler(dir));
+            server.start();
+            System.out.println("HttpServer is listening on port " + port);
+        } catch (Exception e) {
+            System.err.println("error: " + e);
+        }
     }
 
     @AfterClass
@@ -76,6 +91,7 @@ public class RetrieveAndProcessActorTest {
         }
         FileUtils.deleteDirectory(new File(FILESYSTEM_PATH_PREFIX));
         FileUtils.deleteDirectory(new File(PROCESSING_PATH_PREFIX));
+        server.stop();
     }
 
     @Test
@@ -730,7 +746,7 @@ public class RetrieveAndProcessActorTest {
                 largeThumbnailExtractionSubTask
         );
 
-        final RetrieveUrl task = new RetrieveUrl("http://mediaphoto.mnhn.fr/media/1397829255202urOtiO6WnHxINQKd", new ProcessingJobLimits(), DocumentReferenceTaskType.UNCONDITIONAL_DOWNLOAD,"a",
+        final RetrieveUrl task = new RetrieveUrl(jpegMediafrUrl, new ProcessingJobLimits(), DocumentReferenceTaskType.UNCONDITIONAL_DOWNLOAD,"a",
                 "referenceid-1", Collections.<String, String>emptyMap(),
                 new ProcessingJobTaskDocumentReference(DocumentReferenceTaskType.UNCONDITIONAL_DOWNLOAD,
                         "source-reference-1", subTasks), null,new ReferenceOwner("unknown","unknwon","unknown"));

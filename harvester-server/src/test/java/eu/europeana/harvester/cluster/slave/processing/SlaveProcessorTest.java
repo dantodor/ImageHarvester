@@ -3,6 +3,7 @@ package eu.europeana.harvester.cluster.slave.processing;
 import akka.event.LoggingAdapter;
 import com.google.common.io.Files;
 import eu.europeana.harvester.cluster.domain.messages.RetrieveUrl;
+import eu.europeana.harvester.cluster.slave.HttpServer;
 import eu.europeana.harvester.cluster.slave.downloading.SlaveDownloader;
 import eu.europeana.harvester.cluster.slave.processing.color.ColorExtractor;
 import eu.europeana.harvester.cluster.slave.processing.metainfo.MediaMetaInfoExtractor;
@@ -81,6 +82,10 @@ public class SlaveProcessorTest {
 
     private static final Throwable exception = new Exception("hahaha");
 
+    private static HttpServer server;
+    private final static int port = 8080;
+    private static final String assetDir = "./src/test/resources";
+
     @After
     public void tearDown() throws IOException {
         FileUtils.deleteDirectory(new File(PATH_DOWNLOADED));
@@ -97,6 +102,19 @@ public class SlaveProcessorTest {
 //                "source-reference-1", subTasks);
         taskDocumentReference = new ProcessingJobTaskDocumentReference(DocumentReferenceTaskType.CONDITIONAL_DOWNLOAD,
                 "source-reference-1", subTasks);
+
+        try {
+            server = new HttpServer(port);
+            HttpServer.VirtualHost host = server.getVirtualHost(null); // default host
+            host.setAllowGeneratedIndex(true); // with directory index pages
+            File dir = new File(assetDir);
+            host.addContext("/", new HttpServer.FileContextHandler(dir));
+            server.start();
+            System.out.println("HttpServer is listening on port " + port);
+        } catch (Exception e) {
+            System.err.println("error: " + e);
+        }
+
     }
 
     private void downloadFile (final String url, final String pathToStore) throws Exception {
