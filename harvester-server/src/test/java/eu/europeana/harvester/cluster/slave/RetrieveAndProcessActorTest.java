@@ -47,11 +47,13 @@ public class RetrieveAndProcessActorTest {
         }
     };
 
+    private final static int port = 9090;
+
     private static String PROCESSING_PATH_PREFIX = Paths.get("harvester-server/src/test/resources/processing").toAbsolutePath().toString() + "/";
-    private static final String jpegImage1GitHubUrl = "http://localhost:8080/image1.jpeg";
-    private static final String tiffImageGitHubUrl = "http://localhost:8080/image3.tif";
-    private static final String pdfTextGitHubUrl = "http://localhost:8080/text2.pdf";
-    private static final String jpegMediafrUrl = "http://localhost:8080/mediafr.jpg";
+    private static final String jpegImage1GitHubUrl = "http://localhost:"+port+"/image1.jpeg";
+    private static final String tiffImageGitHubUrl = "http://localhost:"+port+"/image3.tif";
+    private static final String pdfTextGitHubUrl = "http://localhost:"+port+"/text2.pdf";
+    private static final String jpegMediafrUrl = "http://localhost:"+port+"/mediafr.jpg";
 
     private static final String PATH_PREFIX = Paths.get("src/test/resources/").toAbsolutePath().toString() + "/" ;
     private static final String PATH_COLORMAP = PATH_PREFIX + "colormap.png";
@@ -63,7 +65,6 @@ public class RetrieveAndProcessActorTest {
 
     static ActorSystem system ;
     private static HttpServer server;
-    private final static int port = 8080;
     private static final String assetDir = "./assets";
 
     @BeforeClass

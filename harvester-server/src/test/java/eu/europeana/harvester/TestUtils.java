@@ -17,7 +17,7 @@ public class TestUtils {
     public static String PATH_COLORMAP = PATH_PREFIX + "colormap.png";
     public static final String PATH_DOWNLOADED = PATH_PREFIX + "downloader/";
     //public static final String GitHubUrl_PREFIX = "https://raw.githubusercontent.com/europeana/ImageHarvester/master/harvester-server/src/test/resources/";
-    public static final String GitHubUrl_PREFIX = "http://localhost:8080/";
+    public static final String GitHubUrl_PREFIX = "http://localhost:9090/";
     public static final Map<String, byte[]> filesInBytes = new HashMap<>();
 
     public static final String Image1 = "image1.jpeg";

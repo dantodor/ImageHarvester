@@ -2926,36 +2926,36 @@ public class HttpServer {
      *
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        try {
-            if (args.length == 0) {
-                System.err.printf("Usage: %s <directory> [port]%n", HttpServer.class.getName());
-                return;
-            }
-            File dir = new File(args[0]);
-            if (!dir.canRead())
-                throw new FileNotFoundException(dir.getAbsolutePath());
-            int port = args.length < 2 ? 80 : Integer.parseInt(args[1]);
-            // set up server
-            for (File f : Arrays.asList(new File("/etc/mime.types"), new File(dir, ".mime.types")))
-                if (f.exists())
-                    addContentTypes(f);
-            HttpServer server = new HttpServer(port);
-            VirtualHost host = server.getVirtualHost(null); // default host
-            host.setAllowGeneratedIndex(true); // with directory index pages
-            host.addContext("/", new FileContextHandler(dir));
-            host.addContext("/api/time", new ContextHandler() {
-                public int serve(Request req, Response resp) throws IOException {
-                    long now = System.currentTimeMillis();
-                    resp.getHeaders().add("Content-Type", "text/plain");
-                    resp.send(200, String.format("%tF %<tT", now));
-                    return 0;
-                }
-            });
-            server.start();
-            System.out.println("HTTPServer is listening on port " + port);
-        } catch (Exception e) {
-            System.err.println("error: " + e);
-        }
-    }
+//    public static void main(String[] args) {
+//        try {
+//            if (args.length == 0) {
+//                System.err.printf("Usage: %s <directory> [port]%n", HttpServer.class.getName());
+//                return;
+//            }
+//            File dir = new File(args[0]);
+//            if (!dir.canRead())
+//                throw new FileNotFoundException(dir.getAbsolutePath());
+//            int port = args.length < 2 ? 80 : Integer.parseInt(args[1]);
+//            // set up server
+//            for (File f : Arrays.asList(new File("/etc/mime.types"), new File(dir, ".mime.types")))
+//                if (f.exists())
+//                    addContentTypes(f);
+//            HttpServer server = new HttpServer(port);
+//            VirtualHost host = server.getVirtualHost(null); // default host
+//            host.setAllowGeneratedIndex(true); // with directory index pages
+//            host.addContext("/", new FileContextHandler(dir));
+//            host.addContext("/api/time", new ContextHandler() {
+//                public int serve(Request req, Response resp) throws IOException {
+//                    long now = System.currentTimeMillis();
+//                    resp.getHeaders().add("Content-Type", "text/plain");
+//                    resp.send(200, String.format("%tF %<tT", now));
+//                    return 0;
+//                }
+//            });
+//            server.start();
+//            System.out.println("HTTPServer is listening on port " + port);
+//        } catch (Exception e) {
+//            System.err.println("error: " + e);
+//        }
+//    }
 }

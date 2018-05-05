@@ -83,7 +83,7 @@ public class SlaveProcessorTest {
     private static final Throwable exception = new Exception("hahaha");
 
     private static HttpServer server;
-    private final static int port = 8080;
+    private final static int port = 9090;
     private static final String assetDir = "./src/test/resources";
 
     @After
