@@ -91,7 +91,7 @@ public class SlaveLinkCheckerTest {
         final ProcessingJobLimits limits = new ProcessingJobLimits(
                 100*1000l /* retrievalTerminationThresholdTimeLimitInMillis  */,
                 5 * 1000l /* retrievalTerminationThresholdReadPerSecondInBytes */,
-                10l /* retrievalConnectionTimeoutInMillis - IT SHOULD FAIL BECAUSE OF THIS  */,
+                0l /* retrievalConnectionTimeoutInMillis - IT SHOULD FAIL BECAUSE OF THIS  */,
                 10 /* retrievalMaxNrOfRedirects */,
                 100 * 1000l /* processingTerminationThresholdTimeLimitInMillis */);
 
