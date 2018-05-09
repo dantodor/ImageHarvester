@@ -52,7 +52,13 @@ public class MongoDBUtils {
     }
 
     public void cleanMongoDatabase() {
+
         mongodExecutable.stop();
+        try {
+            Thread.sleep(5000);
+        } catch ( Exception e) {
+            System.out.println(e);
+        }
     }
 
     public DB connectToSource () throws IOException {
