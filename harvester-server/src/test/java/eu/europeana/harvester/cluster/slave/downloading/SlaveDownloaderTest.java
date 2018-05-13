@@ -56,6 +56,11 @@ public class SlaveDownloaderTest {
     public void tearDown() throws Exception {
         if (new File(pathOnDisk).exists()) new File(pathOnDisk).delete();
         server.stop();
+        try {
+            Thread.sleep(5000);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     @Rule

@@ -93,6 +93,12 @@ public class RetrieveAndProcessActorTest {
         FileUtils.deleteDirectory(new File(FILESYSTEM_PATH_PREFIX));
         FileUtils.deleteDirectory(new File(PROCESSING_PATH_PREFIX));
         server.stop();
+
+        try {
+            Thread.sleep(5000);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     @Test
