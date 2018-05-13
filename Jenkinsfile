@@ -16,7 +16,7 @@ node {
   }
 
   stage ('Build Custom Environment') {
-    buildEnv = docker.build("build_env:${GIT_VERSION}", 'docker-build-env')
+    buildEnv = docker.build("build_env:test", 'docker-build-env')
   }
 
   buildEnv.inside {
