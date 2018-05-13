@@ -1,43 +1,50 @@
-pipeline {
-    agent any
-    stages {
+#!groovy
 
-        stage ('Build') {
-            steps {
-                sh 'mvn compile'
-            }
-        }
+String GIT_VERSION
 
-        stage ('Test') {
-            steps {
-                sh 'mvn test'
-            }
-        }
+node {
 
-        stage ('Prepare Docker jar') {
-            steps {
-                sh 'mvn -Dmaven.test.skip=true clean install package -DskipTests'
-                sh 'mv harvester-server/target/harvester-server-0.3-SNAPSHOT-allinone.jar harvester-server/docker/harvester.jar'
-            }
-        }
+  def buildEnv
 
-        stage ('Build and Push Docker Image') {
-            steps {
-                docker.withCredentials([[$class: "UsernamePasswordMultiBinding", usernameVariable: 'DOCKERHUB_USER',
-                    passwordVariable: 'DOCKERHUB_PASS', credentialsId: 'dockerhub']]) {
-                        sh 'docker login --username $DOCKERHUB_USER --password $DOCKERHUB_PASS'
-                        def serverImage = docker.build("dantodor/imh:1", 'harvester-server/docker')
-                        serverImage.push()
-                        sh 'docker logout'
-                }
+  stage ('Checkout') {
+    deleteDir()
+    checkout scm
+    GIT_VERSION = sh (
+      script: 'git describe --tags',
+      returnStdout: true
+    ).trim()
+  }
 
-            }
-        }
+  stage ('Build Custom Environment') {
+    buildEnv = docker.build("build_env:1", 'docker-build-env')
+  }
 
+  buildEnv.inside {
+
+    stage ('Build') {
+      sh 'mvn compile'
     }
+
+    stage ('Test') {
+          sh 'mvn test'
+    }
+
+    stage ('Prepare Docker jar') {
+      sh 'mvn -Dmaven.test.skip=true clean install package -DskipTests'
+      sh 'mv harvester-server/target/harvester-server-0.3-SNAPSHOT-allinone.jar harvester-server/docker/harvester.jar'
+    }
+  }
+
+  stage ('Build and Push Docker Image') {
+    withCredentials([[$class: "UsernamePasswordMultiBinding", usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS', credentialsId: 'dockerhub']]) {
+      sh 'docker login --username $DOCKERHUB_USER --password $DOCKERHUB_PASS'
+    }
+    def serverImage = docker.build("dantodor/imh:9", 'harvester-server/docker')
+    serverImage.push()
+    sh 'docker logout'
+  }
+
+
 }
-
-
-
 
 
