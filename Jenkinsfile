@@ -1,18 +1,6 @@
 pipeline {
     agent any
-    tools {
-        maven 'Maven 3.3.9'
-        jdk 'jdk8'
-    }
     stages {
-        stage ('Initialize') {
-            steps {
-                sh '''
-                    echo "PATH = ${PATH}"
-                    echo "M2_HOME = ${M2_HOME}"
-                '''
-            }
-        }
 
         stage ('Build') {
             steps {
@@ -35,12 +23,14 @@ pipeline {
 
         stage ('Build and Push Docker Image') {
             steps {
-                withCredentials([[$class: "UsernamePasswordMultiBinding", usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS', credentialsId: 'dockerhub']]) {
-                    sh 'docker login --username $DOCKERHUB_USER --password $DOCKERHUB_PASS'
+                docker.withCredentials([[$class: "UsernamePasswordMultiBinding", usernameVariable: 'DOCKERHUB_USER',
+                    passwordVariable: 'DOCKERHUB_PASS', credentialsId: 'dockerhub']]) {
+                        sh 'docker login --username $DOCKERHUB_USER --password $DOCKERHUB_PASS'
+                        def serverImage = docker.build("dantodor/imh:1", 'harvester-server/docker')
+                        serverImage.push()
+                        sh 'docker logout'
                 }
-                def serverImage = docker.build("dantodor/imh:1", 'harvester-server/docker')
-                serverImage.push()
-                sh 'docker logout'
+
             }
         }
 
