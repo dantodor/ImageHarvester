@@ -31,7 +31,7 @@ node {
 
     stage ('Prepare Docker jar') {
       sh 'mvn -Dmaven.test.skip=true clean install package -DskipTests'
-      sh 'mv harvester-server/target/harvester-server-0.3-SNAPSHOT-allinone.jar harvester-server/docker/harvester.jar'
+      sh 'mv harvester-server/target/harvester-server-0.3-SNAPSHOT-allinone.jar harvester-server/docker/harvester/harvester.jar'
     }
   }
 
