@@ -14,10 +14,6 @@ RUN apt-get update && \
     apt-get install -y imagemagick && \
     apt-get clean
 
-#FROM ubuntu
-#RUN apt-get -y update && apt-get install -y imagemagick
-#FROM java-image
-#FROM java:8
 
 COPY . /
 
