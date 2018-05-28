@@ -2,7 +2,9 @@ package eu.europeana.harvester.cluster;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
+import akka.actor.Address;
 import akka.actor.Props;
+import akka.cluster.Cluster;
 import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.Slf4jReporter;
 import com.codahale.metrics.graphite.Graphite;
@@ -101,7 +103,9 @@ class Master {
                 .build(graphite);
         reporter2.start(1, TimeUnit.MINUTES);
 
-        system = ActorSystem.create("ClusterSystem", config);
+        //system = ActorSystem.create("ClusterSystem", config);
+        system = ActorSystem.create("ClusterSystem");
+
 
         final Integer taskBatchSize = config.getInt("default-limits.taskBatchSize");
         final Long defaultBandwidthLimitReadInBytesPerSec =
@@ -170,6 +174,10 @@ class Master {
                 cleanupInterval,
                 delayForCountingTheStateOfDocuments ), "clusterMaster");
 
+        Cluster cluster = Cluster.get(system);
+        Address a = new Address("akka.tcp","ClusterSystem",
+                "akka-seed-0.akka-seed.default.svc.cluster.local",2551);
+        cluster.join(a);
     }
 
     public void start() {

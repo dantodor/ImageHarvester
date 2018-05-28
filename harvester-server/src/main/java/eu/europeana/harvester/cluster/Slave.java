@@ -2,6 +2,8 @@ package eu.europeana.harvester.cluster;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
+import akka.actor.Address;
+import akka.cluster.Cluster;
 import akka.routing.FromConfig;
 import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.Slf4jReporter;
@@ -153,6 +155,11 @@ public class Slave {
 
         NodeSupervisor.createActor(system, slave, masterSender,nodeMasterConfig,
                 mediaStorageClient, SlaveMetrics.METRIC_REGISTRY);
+
+        Cluster cluster = Cluster.get(system);
+        Address a = new Address("akka.tcp","ClusterSystem",
+                "akka-seed-0.akka-seed.default.svc.cluster.local",2551);
+        cluster.join(a);
 
         //system.actorOf(Props.create(MetricsListener.class), "metricsListener");
     }
