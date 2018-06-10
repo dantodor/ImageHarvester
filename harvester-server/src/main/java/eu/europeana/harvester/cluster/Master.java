@@ -75,12 +75,12 @@ class Master {
                 ConfigParseOptions.defaults().setSyntax(ConfigSyntax.CONF));
 
         final Integer jobsPerIP = config.getInt("mongo.jobsPerIP");
-        final Duration receiveTimeoutInterval = Duration.millis(config.getInt("akka.cluster.receiveTimeoutInterval"));
+        final Duration receiveTimeoutInterval = Duration.millis(config.getInt("default-limits.receiveTimeoutInterval"));
         final Integer responseTimeoutFromSlaveInMillis =
                 config.getInt("default-limits.responseTimeoutFromSlaveInMillis");
         final Long maxTasksInMemory = config.getLong("mongo.maxTasksInMemory");
 
-        final JobRestarterConfig jobRestarterConfig = JobRestarterConfig.valueOf(config.getConfig("akka.cluster"));
+        final JobRestarterConfig jobRestarterConfig = JobRestarterConfig.valueOf(config.getConfig("default-limits"));
 
         final ClusterMasterConfig clusterMasterConfig = new ClusterMasterConfig(jobsPerIP, maxTasksInMemory,
                 receiveTimeoutInterval, responseTimeoutFromSlaveInMillis, jobRestarterConfig, WriteConcern.NONE);
@@ -155,8 +155,8 @@ class Master {
         final List<String> ignoredIPs = config.getStringList("IPExceptions.ignoredIPs");
         final IPExceptions ipExceptions = new IPExceptions(ipExceptionsMaxConcurrentConnectionsLimit, ips, ignoredIPs);
 
-        final Integer cleanupInterval = config.getInt("akka.cluster.cleanupInterval");
-        final Duration delayForCountingTheStateOfDocuments = Duration.millis(config.getDuration("akka.cluster.delayForCountingTheStateOfDocuments",
+        final Integer cleanupInterval = config.getInt("default-limits.cleanupInterval");
+        final Duration delayForCountingTheStateOfDocuments = Duration.millis(config.getDuration("default-limits.delayForCountingTheStateOfDocuments",
                                                                                                TimeUnit.MILLISECONDS));
 
         clusterMaster = system.actorOf(Props.create(ClusterMasterActor.class,
