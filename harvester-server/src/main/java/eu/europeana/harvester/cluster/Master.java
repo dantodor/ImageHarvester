@@ -103,8 +103,8 @@ class Master {
                 .build(graphite);
         reporter2.start(1, TimeUnit.MINUTES);
 
-        //system = ActorSystem.create("ClusterSystem", config);
-        system = ActorSystem.create("ClusterSystem");
+        system = ActorSystem.create("ClusterSystem", config);
+        //system = ActorSystem.create("ClusterSystem");
 
 
         final Integer taskBatchSize = config.getInt("default-limits.taskBatchSize");
