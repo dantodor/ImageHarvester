@@ -39,7 +39,7 @@ node {
     withCredentials([[$class: "UsernamePasswordMultiBinding", usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS', credentialsId: 'dockerhub']]) {
       sh 'docker login --username $DOCKERHUB_USER --password $DOCKERHUB_PASS'
     }
-    def serverImage = docker.build("dantodor/imh:11", 'harvester-server/docker')
+    def serverImage = docker.build("dantodor/imh:12", 'harvester-server/docker')
     serverImage.push()
     sh 'docker logout'
   }
