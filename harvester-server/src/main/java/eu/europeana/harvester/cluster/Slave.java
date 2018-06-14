@@ -228,28 +228,30 @@ public class Slave {
 
 
 
-    public void restart() {
-        LOG.debug("CLUSTER SLAVE Shutting down the actor system, restart.");
-        SlaveMetrics.Worker.Slave.restartCounter.inc();
-        system.shutdown();
-        system.awaitTermination();
-        //sleep 5 minutes
-        try {
-            Thread.sleep(300000l);
-        } catch (InterruptedException e) {
-            LOG.error(e.getMessage());
-        }
+//    public void restart() {
+//        LOG.debug("CLUSTER SLAVE Shutting down the actor system, restart.");
+//        SlaveMetrics.Worker.Slave.restartCounter.inc();
+//        system.shutdown();
+//        system.awaitTermination();
+//        //sleep 5 minutes
+//        try {
+//            Thread.sleep(300000l);
+//        } catch (InterruptedException e) {
+//            LOG.error(e.getMessage());
+//        }
+//
+//        LOG.debug("trying to restart the actor system.");
+//
+//        try {
+//            this.reinit(this);
+//
+//        } catch ( Exception e ){
+//            LOG.error("Init threw exception",e);
+//        }
+//
+//    }
 
-        LOG.debug("trying to restart the actor system.");
-
-        try {
-            this.reinit(this);
-
-        } catch ( Exception e ){
-            LOG.error("Init threw exception",e);
-        }
-
-    }
+    public void restart() {}
 
     public ActorSystem getActorSystem() {
         return system;
