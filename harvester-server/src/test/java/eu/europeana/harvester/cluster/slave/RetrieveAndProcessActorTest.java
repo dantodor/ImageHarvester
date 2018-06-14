@@ -88,7 +88,7 @@ public class RetrieveAndProcessActorTest {
     @AfterClass
     public static void teardown() throws IOException {
         if (null != system) {
-            system.shutdown();
+            system.terminate();
         }
         FileUtils.deleteDirectory(new File(FILESYSTEM_PATH_PREFIX));
         FileUtils.deleteDirectory(new File(PROCESSING_PATH_PREFIX));

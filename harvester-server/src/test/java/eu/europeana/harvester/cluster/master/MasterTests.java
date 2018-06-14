@@ -207,7 +207,7 @@ public class MasterTests {
     }
 
     private void stopSystem(final ActorSystem system) {
-        system.shutdown();
+        system.terminate();
     }
 
 
